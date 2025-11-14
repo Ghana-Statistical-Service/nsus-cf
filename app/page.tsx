@@ -1,65 +1,84 @@
-import Image from "next/image";
+import Navbar from "@/components/Navbar";
+import ConverterForm from "@/components/ConverterForm";
+import Footer from "@/components/Footer";
 
-export default function Home() {
+export default function Page() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+
+      <main className="flex-1 pb-16">
+        {/* Hero */}
+        <section className="mx-auto max-w-6xl px-4 pt-20 pb-16">
+          <div className="text-center">
+            
+            {/* Main heading */}
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              <span className="block">Ghana Non-Standard Units</span>
+              <span className="mt-2 block text-brandPurple">
+                Conversion Factor
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="mt-6 mx-auto max-w-3xl text-base leading-relaxed text-slate-600">
+              The NSUs-CF system helps you convert Ghana&apos;s local measurement units
+              into trusted standard units with ease. It provides verified,
+              region-specific factors to support traders, field officers, analysts and
+              institutions in ensuring accuracy and consistency.
+            </p>
+
+            {/* CTA button */}
+            <button className="mt-10 inline-flex items-center rounded-full bg-brandPurple px-10 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition hover:bg-brandTeal">
+              Getting Started
+              <span className="ml-2 text-lg">→</span>
+            </button>
+          </div>
+        </section>
+
+
+        {/* Converter */}
+        <ConverterForm />
+
+        {/* Why Use section */}
+        <section
+          id="matrix"
+          className="mt-20 bg-brandPurple py-16 text-white"
+        >
+          <div className="mx-auto max-w-5xl px-4 text-center">
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              Why Use NSUs-CF System
+            </h2>
+            <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-white/90">
+              The web-based conversion factor system provides standardized,
+              verified conversion ratios for various non-standard measurement
+              units. Whether you are working with Olonka, blue rubber bucket or
+              any other local unit, NSUs-CF helps you translate them reliably
+              into standard units such as kilograms.
+            </p>
+
+            <button
+              id="about"
+              className="mt-10 rounded-full bg-brandPink px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition hover:bg-white hover:text-brandPurple"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              Read More →
+            </button>
+          </div>
+        </section>
+
+        {/* Help section */}
+        <section
+          id="help"
+          className="mx-auto mt-8 max-w-4xl px-4 text-center text-sm text-slate-700"
+        >
+          <h3 className="text-lg font-semibold">Need help?</h3>
+          <p className="mt-3">
+            For questions on non-standard units, new commodities or regional
+            updates, Please contact Ghana Statistical Service-Agric & Environment Section.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+        </section>
       </main>
+      <Footer />
     </div>
   );
 }

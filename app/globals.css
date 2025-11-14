@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,6 +11,12 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+@theme {
+  --color-brandPurple: #2d205c;
+  --color-brandTeal: #00b9a7;
+  --color-brandPink: #ff2e63;
 }
 
 @media (prefers-color-scheme: dark) {
