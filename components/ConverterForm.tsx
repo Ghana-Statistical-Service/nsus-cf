@@ -7,7 +7,7 @@ type Region = "Greater Accra" | "Ashanti" | "Northern" | "Western"
             | "Western North" | "Eastern" | "Central" | "Volta" | "Oti" | "Upper East" 
             | "Upper West" | "North East" | "Savannah" | "Bono" 
             | "Bono East" | "Ahafo";
-type Category = "Market" | "Household";
+type Category = "Market" | "Household"|"Farmgate";
 type FoodGroup = "Cereals" | "Legumes" | "Roots & Tubers";
 type Commodity = "Maize" | "Rice" | "Sorghum";
 type LocalUnit = "Olonka" | "Rubber Bucket" | "Tin";
@@ -155,6 +155,7 @@ export default function ConverterForm() {
             <option value="">Select a category</option>
               <option>Market</option>
               <option>Household</option>
+              <option>Farmgate</option>
             </select>
           </div>
         </div>
