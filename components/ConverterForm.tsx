@@ -1,90 +1,201 @@
 "use client";
-import { useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+//import { Option, useCascade } from "../app/cascade";
+//import Image from "next/image";
 
 
-type Region = "Greater Accra" | "Ashanti" | "Northern" | "Western" 
-            | "Western North" | "Eastern" | "Central" | "Volta" | "Oti" | "Upper East" 
-            | "Upper West" | "North East" | "Savannah" | "Bono" 
-            | "Bono East" | "Ahafo";
-type Category = "Market" | "Household"|"Farmgate";
-type FoodGroup = "Cereals" | "Legumes" | "Roots & Tubers";
-type Commodity = "Maize" | "Rice" | "Sorghum";
-type LocalUnit = "Olonka" | "Rubber Bucket" | "Tin";
-type StandardUnit = "KG" | "Grams";
-
-
-interface ConversionKey {
-  region: Region;
-  category: Category;
-  foodGroup: FoodGroup;
-  commodity: Commodity;
-  localUnit: LocalUnit;
-  size: "Small" | "Medium" | "Large";
-  standardUnit: StandardUnit;
-}
-
-
-/** Dummy conversion table – configure real data later */
-const CONVERSIONS: Array<ConversionKey & { factor: number }> = [
-  {
-    region: "Greater Accra",
-    category: "Market",
-    foodGroup: "Cereals",
-    commodity: "Maize",
-    localUnit: "Olonka",
-    size: "Medium",
-    standardUnit: "KG",
-    factor: 1.2,
-  },
-];
-
-
-
-const LOCALUNIT_IMAGES: Record<LocalUnit, string> = {
-  Olonka: "/olonka.jpeg",
-  "Rubber Bucket": "/rubber-bucket.avif", // change to your real file paths
-  Tin: "/tin.png",
-};
-
+type Option = { id: number; name: string };
 
 export default function ConverterForm() {
-  const [region, setRegion] = useState<Region | "">("");
-  const [category, setCategory] = useState<Category | "">("");
-  const [foodGroup, setFoodGroup] = useState<FoodGroup | "">("");
-  const [commodity, setCommodity] = useState<Commodity | "">("");
-  const [size, setSize] = useState<"Small" | "Medium" | "Large" | "">("");
-  const [localUnit, setLocalUnit] = useState<LocalUnit>("Olonka");
-  const [standardUnit, setStandardUnit] = useState<StandardUnit | "">("");
+
+  // States that hold dropdown options (lists)
+  const [region, setRegion] = useState<Option[]>([]);
+  const [source, setSource] = useState<Option[]>([]);
+  const [groups, setGroups] = useState<Option[]>([]);
+  const [commodities, setCommodities] = useState<Option[]>([]);
+  const [units, setUnits] = useState<Option[]>([]);
+  const [sizes, setSizes] = useState<Option[]>([]);
+  
+
+  // States that hold selected values (IDs) for dependent dropdowns
+  const [regionId, setRegionId] = useState('');
+  const [sourceId, setSourceId] = useState('');
+  const [groupId, setGroupId] = useState('');
+  const [commodityId, setCommodityId] = useState('');
+  const [unitId, setUnitId] = useState('');
+  const [sizeId, setSizeId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [result, setResult] = useState<string | null>(null);
-  const imageSrc = LOCALUNIT_IMAGES[localUnit] ?? "/nsus.png";
+  const [standardUnit, setStandardUnit] = useState('');
 
-  function handleConvert() {
-    const match = CONVERSIONS.find(
-      (c) =>
-        c.region === region &&
-        c.category === category &&
-        c.foodGroup === foodGroup &&
-        c.commodity === commodity &&
-        c.localUnit === localUnit &&
-        c.size === size &&
-        c.standardUnit === standardUnit
-    );
 
-    if (!match) {
-      setResult(
-        "No conversion factor configured yet for this combination. Please contact GSS-Agric & Environment Section."
+  /* Load regions */
+  useEffect(() => {
+    fetch('/api/regions')
+      .then(res => res.json())
+      .then(data =>
+        setRegion(data.map((r: any) => ({ id: Number(r.region_id), name: r.region })))
       );
-      return;
+  }, []);
+
+  /* Load source */
+  useEffect(() => {
+    fetch('/api/sources')
+      .then(res => res.json())
+      .then(data =>
+        setSource(data.map((s: any) => ({ id: s.source_id, name: s.source_desc })))
+      );
+  }, []);
+
+  /* Load commodity groups based on selected source */
+  useEffect(() => {
+  if (!sourceId) return;
+
+  setGroups([]);
+  setGroupId('');
+  setCommodities([]);
+  setCommodityId('');
+  setUnits([]);
+  setUnitId('');
+  setSizes([]);
+  setSizeId('');
+
+  fetch(`/api/commodity_groups?source_id=${sourceId}`)
+    .then(res => res.json())
+    .then(data =>
+      setGroups(data.map((g: any) => ({id: g.group_id, name: g.group_desc})))
+    );
+  }, [sourceId]);
+
+
+  //Load commodities based on selected source and group 
+  useEffect(() => {
+  if (!sourceId || !groupId) return;
+
+  setCommodities([]);
+  setCommodityId('');
+  setUnits([]);
+  setUnitId('');
+  setSizes([]);
+  setSizeId('');
+
+  fetch(`/api/commodities?source_id=${sourceId}&group_id=${groupId}`)
+    .then(res => res.json())
+    .then(data =>
+      setCommodities(data.map((c: any) => ({id: c.commodity_id, name: c.commodity_desc })))
+    );
+  }, [sourceId, groupId]);
+
+
+  // Load local units based on selected source and commodity 
+  useEffect(() => {
+  if (!sourceId || !commodityId) return;
+
+  setUnits([]);
+  setUnitId('');
+  setSizes([]);
+  setSizeId('');
+
+  fetch(`/api/local_units?source_id=${sourceId}&commodity_id=${commodityId}`)
+    .then(res => res.json())
+    .then(data =>
+      setUnits(data.map((u: any) => ({id: u.lunit_id, name: u.lunit_desc})))
+    );
+  }, [sourceId, commodityId]);
+
+
+  /* Load unit sizes based on selected source, commodity and local unit*/
+  useEffect(() => {
+  if (!sourceId || !commodityId || !unitId) return;
+
+  setSizes([]);
+  setSizeId('');
+
+  fetch(`/api/local_unit_sizes?source_id=${sourceId}&commodity_id=${commodityId}&lunit_id=${unitId}`)
+    .then(res => res.json())
+    .then(data =>
+      setSizes(
+        data.map((s: any) => ({id: s.lunit_size_id, name: s.lunit_size_desc })))
+    );
+  }, [sourceId, commodityId, unitId]);
+
+
+  const isFormValid =
+    regionId &&
+    sourceId &&
+    groupId &&
+    commodityId &&
+    unitId &&
+    sizeId &&
+    standardUnit &&
+    quantity > 0;
+  
+
+  function resetResult() {
+    setResult(null);
+  }
+
+  // image source URL
+  const imageSrc =
+  sizeId && commodityId && sourceId
+    ? `/api/images?lunit_size_id=${sizeId}&commodity_id=${commodityId}&source_id=${sourceId}`
+    : '/imagePlaceholder.png';
+
+
+  async function handleConvert() {
+    
+    try {
+      // Call the conversion factors API with all selected filter IDs
+      const res = await fetch(
+        `/api/conversion_factors?region_id=${regionId}&source_id=${sourceId}&group_id=${groupId}&commodity_id=${commodityId}&lunit_id=${unitId}&lunit_size_id=${sizeId}`
+      );
+
+      // If the HTTP response itself failed (e.g. 404, 500)
+      if (!res.ok) {
+        setResult(
+          "No conversion factor has been configured for the selected combination. Kindly contact the Agric & Environment Section at GSS for further assistance."
+        );
+        return;
+      }
+
+      // Parse the JSON response
+      const data = await res.json();
+      //console.log("Conversion data:", data);
+
+      // Validate that expected data exists in the response
+      if (!data.conversion_factor_kg) {
+        setResult(
+          "Conversion factor data is unavailable for the selected combination. Kindly contact the Agric & Environment Section at GSS for further assistance."
+        );
+        return;
+      }
+
+      // Ensure numeric values before calculation
+      var factor = Number(data.conversion_factor_kg);
+      const qty = Number(quantity);
+
+      if (standardUnit === "g") {
+        // Adjust factor for grams conversion
+        factor *= 1000;
+      }
+
+      // Perform the conversion to the selected standard unit
+      const value = qty * factor;
+
+      // Display a formatted and user-friendly conversion result
+      setResult(
+        `${qty.toLocaleString()} ${data.local_unit} (${data.local_unit_size}) ≈ ${value.toFixed(
+          3
+        )} ${standardUnit}`
+      );
+    } catch (error) {
+      // Catch network or unexpected runtime errors
+      console.error("Conversion error:", error);
+      setResult(
+        "An unexpected error occurred while processing the conversion. Please try again or contact the Agric & Environment Section at GSS."
+      );
     }
 
-    const value = quantity * match.factor;
-    setResult(
-      `${quantity.toLocaleString()} ${localUnit} (${size}) ≈ ${value.toFixed(
-        3
-      )} ${standardUnit}`
-    );
   }
 
   const selectBase =
@@ -99,15 +210,16 @@ export default function ConverterForm() {
 <div className="mt-8 flex items-center justify-center">
   <div className="overflow-hidden rounded-[2rem] bg-slate-100 p-6 shadow-md">
     <div className="relative h-56 w-72">
-      <Image
+      <img
         src={imageSrc}
-        alt={`${localUnit} in local unit`}
-        fill        // <-- Image will fill this  h-56 w-72 box
-        className="rounded-[1.5rem] object-cover"
+        alt={`${unitId} in local unit`}
+        onError={(e) => {e.currentTarget.src = '/imagePlaceholder.png'; }}
+        //fill        // <-- Image will fill this  h-56 w-72 box
+        className="absolute inset-0 h-full w-full object-cover rounded-[1.5rem]"
       />
     </div>
   </div>
-</div>
+</div>  
 
 
       {/* Left: form */}
@@ -117,29 +229,10 @@ export default function ConverterForm() {
             <label className="mb-2 block text-sm font-semibold text-slate-700">
               Select Region
             </label>
-            
-            <select
-              className={selectBase}
-              value={region}
-              onChange={(e) => setRegion(e.target.value as Region)}
-            >
-            <option value="">Select a region</option>
-              <option>Greater Accra</option>
-              <option>Ashanti</option>
-              <option>Northern</option>
-              <option>Western</option>
-              <option>Western North</option>
-                <option>Eastern</option>
-                <option>Central</option>
-                <option>Volta</option>
-                <option>Oti</option>
-                <option>Upper East</option>
-                <option>Upper West</option>
-                <option>North East</option>
-                <option>Savannah</option>
-                <option>Bono</option>
-                <option>Bono East</option>
-                <option>Ahafo</option> 
+
+            <select className={selectBase} value={regionId} onChange={(e) => {setRegionId(e.target.value); resetResult();}}>
+              <option value="">Select a region</option>
+              {region.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
             </select>
           </div>
 
@@ -147,15 +240,9 @@ export default function ConverterForm() {
             <label className="mb-2 block text-sm font-semibold text-slate-700">
               Select Category
             </label>
-            <select
-              className={selectBase}
-              value={category}
-              onChange={(e) => setCategory(e.target.value as Category)}
-            >
-            <option value="">Select a category</option>
-              <option>Market</option>
-              <option>Household</option>
-              <option>Farmgate</option>
+            <select className={selectBase} value={sourceId} onChange={(e) => {setSourceId(e.target.value); resetResult();}} disabled={!regionId}>
+              <option value="">Select a category</option>
+              {source.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
         </div>
@@ -165,15 +252,9 @@ export default function ConverterForm() {
             <label className="mb-2 block text-sm font-semibold text-slate-700">
               Select Food Groupings
             </label>
-            <select
-              className={selectBase}
-              value={foodGroup}
-              onChange={(e) => setFoodGroup(e.target.value as FoodGroup)}
-            >
-                <option value="">Select a food group</option>
-              <option>Cereals</option>
-              <option>Legumes</option>
-              <option>Roots &amp; Tubers</option>
+            <select className={selectBase} value={groupId} onChange={(e) => {setGroupId(e.target.value); resetResult();}} disabled={!sourceId}>
+              <option value="">Select a food group</option>
+              {groups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
             </select>
           </div>
 
@@ -181,15 +262,9 @@ export default function ConverterForm() {
             <label className="mb-2 block text-sm font-semibold text-slate-700">
               Select Commodity
             </label>
-            <select
-              className={selectBase}
-              value={commodity}
-              onChange={(e) => setCommodity(e.target.value as Commodity)}
-            >
-                <option value="">Select a commodity</option>
-              <option>Maize</option>
-              <option>Rice</option>
-              <option>Sorghum</option>
+            <select className={selectBase} value={commodityId} onChange={(e) => {setCommodityId(e.target.value); resetResult();}} disabled={!groupId}>
+              <option value="">Select a commodity</option>
+              {commodities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
         </div>
@@ -197,34 +272,21 @@ export default function ConverterForm() {
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-700">
-              Size of Local Unit
+              Local Unit
             </label>
-            <select
-              className={selectBase}
-              value={size}
-              onChange={(e) =>
-                setSize(e.target.value as "Small" | "Medium" | "Large")
-              }
-            >
-                <option value="">Select size</option>
-              <option>Small</option>
-              <option>Medium</option>
-              <option>Large</option>
+            <select className={selectBase} value={unitId} onChange={(e) => {setUnitId(e.target.value); resetResult();}} disabled={!commodityId}>
+              <option value="">Select Local Unit</option>
+              {units.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
             </select>
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-700">
-              Local Unit
+              Size of Local Unit
             </label>
-            <select
-              className={selectBase}
-              value={localUnit}
-              onChange={(e) => setLocalUnit(e.target.value as LocalUnit)}
-            >
-              <option>Olonka</option>
-              <option>Rubber Bucket</option>
-              <option>Tin</option>
+            <select className={selectBase} value={sizeId} onChange={(e) => {setSizeId(e.target.value); resetResult();}} disabled={!unitId}> 
+              <option value="">Select size of local unit</option>
+              {sizes.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
         </div>
@@ -237,11 +299,11 @@ export default function ConverterForm() {
             <select
               className={selectBase}
               value={standardUnit}
-              onChange={(e) => setStandardUnit(e.target.value as StandardUnit)}
+              onChange={(e) => {setStandardUnit(e.target.value); resetResult();}}
             >
-                <option value="">Select standard unit</option>
-              <option>KG</option>
-              <option>Grams</option>
+              <option value="">Select standard unit</option>
+              <option value="kg">Kilograms</option>
+              <option value="g">Grams</option>
             </select>
           </div>
 
@@ -255,16 +317,21 @@ export default function ConverterForm() {
               step={0.25}
               className={selectBase}
               value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
+              onChange={(e) => {setQuantity(Number(e.target.value)); resetResult();}}
             />
           </div>
         </div>
 
         <div className="mt-8 flex flex-col items-center gap-4">
           <button
-            type="button"
+            type="button" 
             onClick={handleConvert}
-            className="rounded-full bg-brandTeal px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition hover:translate-y-0.5 hover:shadow-lg"
+            disabled={!isFormValid}
+            className={`rounded-full px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition
+              ${isFormValid
+                ? "bg-brandTeal hover:translate-y-0.5 hover:shadow-lg"
+                : "bg-slate-300 cursor-not-allowed"}
+            `}
           >
             Convert Unit →
           </button>
@@ -275,7 +342,6 @@ export default function ConverterForm() {
             </p>          )}
         </div>
       </div>
-
 
     </section>
   );

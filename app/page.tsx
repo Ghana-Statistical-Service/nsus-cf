@@ -2,7 +2,8 @@ import Navbar from "@/components/Navbar";
 import ConverterForm from "@/components/ConverterForm";
 import Footer from "@/components/Footer";
 
-export default function Page() {
+export default async function Page() {
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
