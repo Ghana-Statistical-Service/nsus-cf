@@ -155,14 +155,14 @@ export default function ConverterForm() {
     : '/imagePlaceholder.png';
     */
   
-  /* Image logic (memoized) */
+  /* Image logic (memoized) 
   const imageSrc = useMemo(() => {
     if (!sizeId || !commodityId || !sourceId) {
       return "/imagePlaceholder.png";
     }
     return `/api/images?lunit_size_id=${sizeId}&commodity_id=${commodityId}&source_id=${sourceId}`;
   }, [sizeId, commodityId, sourceId]);
-
+  */
 
   async function handleConvert() {
     
@@ -233,9 +233,9 @@ export default function ConverterForm() {
   <div className="overflow-hidden rounded-[2rem] bg-slate-100 p-6 shadow-md">
     <div className="relative h-56 w-72">
       <img
-        src={imageSrc}
+        src={'/imagePlaceholder.png'}
         alt={`local unit`}
-        onError={(e) => {e.currentTarget.src = '/imagePlaceholder.png'; }}
+        //onError={(e) => {e.currentTarget.src = '/imagePlaceholder.png'; }}
         //fill        // <-- Image will fill this  h-56 w-72 box
         className="absolute inset-0 h-full w-full object-cover rounded-[1.5rem]"
       />
@@ -359,7 +359,7 @@ export default function ConverterForm() {
           </button>
 
           {result && (
-            <p className="text-3xl font-bold tracking-wide text-green-600">
+            <p className="text-3xl font-bold tracking-wide text-green-600 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             {result}
             </p>          )}
         </div>
