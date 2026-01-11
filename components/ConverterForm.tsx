@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-//import { Option, useCascade } from "../app/cascade";
-//import Image from "next/image";
+import { useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 
 
 type Option = { id: number; name: string };
@@ -120,6 +119,19 @@ export default function ConverterForm() {
   }, [sourceId, commodityId, unitId]);
 
 
+  function handleSourceChange(value: string) {
+    setSourceId(value);
+    setGroupId('');
+    setGroups([]);
+    setCommodityId('');
+    setCommodities([]);
+    setUnitId('');
+    setUnits([]);
+    setSizeId('');
+    setSizes([]);
+  }
+
+
   const isFormValid =
     regionId &&
     sourceId &&
@@ -136,10 +148,20 @@ export default function ConverterForm() {
   }
 
   // image source URL
+  /*
   const imageSrc =
   sizeId && commodityId && sourceId
     ? `/api/images?lunit_size_id=${sizeId}&commodity_id=${commodityId}&source_id=${sourceId}`
     : '/imagePlaceholder.png';
+    */
+  
+  /* Image logic (memoized) */
+  const imageSrc = useMemo(() => {
+    if (!sizeId || !commodityId || !sourceId) {
+      return "/imagePlaceholder.png";
+    }
+    return `/api/images?lunit_size_id=${sizeId}&commodity_id=${commodityId}&source_id=${sourceId}`;
+  }, [sizeId, commodityId, sourceId]);
 
 
   async function handleConvert() {
@@ -212,7 +234,7 @@ export default function ConverterForm() {
     <div className="relative h-56 w-72">
       <img
         src={imageSrc}
-        alt={`${unitId} in local unit`}
+        alt={`local unit`}
         onError={(e) => {e.currentTarget.src = '/imagePlaceholder.png'; }}
         //fill        // <-- Image will fill this  h-56 w-72 box
         className="absolute inset-0 h-full w-full object-cover rounded-[1.5rem]"

@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 
-export const revalidate = 3600; // 1 hour
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const sourceId = searchParams.get('source_id');
@@ -30,3 +28,4 @@ export async function GET(req: Request) {
   return NextResponse.json(rows);
 }
 
+export const revalidate = 3600; // 1 hour
