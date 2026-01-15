@@ -1,7 +1,21 @@
 "use client";
 import { useEffect, useState, useMemo } from "react";
-import Image from "next/image";
+//import Image from "next/image";
 
+const requestCache = new Map<string, any>();
+
+async function cachedFetch<T>(url: string): Promise<T> {
+  if (requestCache.has(url)) {
+    return requestCache.get(url);
+  }
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+
+  const data = await res.json();
+  requestCache.set(url, data);
+  return data;
+}
 
 type Option = { id: number; name: string };
 
@@ -30,21 +44,23 @@ export default function ConverterForm() {
 
   /* Load regions */
   useEffect(() => {
-    fetch('/api/regions')
-      .then(res => res.json())
-      .then(data =>
-        setRegion(data.map((r: any) => ({ id: Number(r.region_id), name: r.region })))
-      );
+  cachedFetch<any[]>('/api/regions')
+    .then(data =>
+      setRegion(data.map(r => ({ id: Number(r.region_id), name: r.region })))
+    )
+    .catch(console.error);
   }, []);
+
 
   /* Load source */
   useEffect(() => {
-    fetch('/api/sources')
-      .then(res => res.json())
-      .then(data =>
-        setSource(data.map((s: any) => ({ id: s.source_id, name: s.source_desc })))
-      );
+  cachedFetch<any[]>('/api/sources')
+    .then(data =>
+      setSource(data.map(s => ({ id: s.source_id, name: s.source_desc })))
+    )
+    .catch(console.error);
   }, []);
+
 
   /* Load commodity groups based on selected source */
   useEffect(() => {
@@ -59,11 +75,11 @@ export default function ConverterForm() {
   setSizes([]);
   setSizeId('');
 
-  fetch(`/api/commodity_groups?source_id=${sourceId}`)
-    .then(res => res.json())
+  cachedFetch<any[]>(`/api/commodity_groups?source_id=${sourceId}`)
     .then(data =>
-      setGroups(data.map((g: any) => ({id: g.group_id, name: g.group_desc})))
-    );
+      setGroups(data.map(g => ({ id: g.group_id, name: g.group_desc })))
+    )
+    .catch(console.error);
   }, [sourceId]);
 
 
@@ -78,12 +94,14 @@ export default function ConverterForm() {
   setSizes([]);
   setSizeId('');
 
-  fetch(`/api/commodities?source_id=${sourceId}&group_id=${groupId}`)
-    .then(res => res.json())
+  cachedFetch<any[]>(`/api/commodities?source_id=${sourceId}&group_id=${groupId}`)
     .then(data =>
-      setCommodities(data.map((c: any) => ({id: c.commodity_id, name: c.commodity_desc })))
-    );
-  }, [sourceId, groupId]);
+      setCommodities(
+        data.map(c => ({ id: c.commodity_id, name: c.commodity_desc }))
+      )
+    )
+    .catch(console.error);
+}, [sourceId, groupId]);
 
 
   // Load local units based on selected source and commodity 
@@ -95,12 +113,12 @@ export default function ConverterForm() {
   setSizes([]);
   setSizeId('');
 
-  fetch(`/api/local_units?source_id=${sourceId}&commodity_id=${commodityId}`)
-    .then(res => res.json())
+  cachedFetch<any[]>(`/api/local_units?source_id=${sourceId}&commodity_id=${commodityId}`)
     .then(data =>
-      setUnits(data.map((u: any) => ({id: u.lunit_id, name: u.lunit_desc})))
-    );
-  }, [sourceId, commodityId]);
+      setUnits(data.map(u => ({ id: u.lunit_id, name: u.lunit_desc })))
+    )
+    .catch(console.error);
+}, [sourceId, commodityId]);
 
 
   /* Load unit sizes based on selected source, commodity and local unit*/
@@ -110,13 +128,14 @@ export default function ConverterForm() {
   setSizes([]);
   setSizeId('');
 
-  fetch(`/api/local_unit_sizes?source_id=${sourceId}&commodity_id=${commodityId}&lunit_id=${unitId}`)
-    .then(res => res.json())
+  cachedFetch<any[]>(`/api/local_unit_sizes?source_id=${sourceId}&commodity_id=${commodityId}&lunit_id=${unitId}`)
     .then(data =>
       setSizes(
-        data.map((s: any) => ({id: s.lunit_size_id, name: s.lunit_size_desc })))
-    );
-  }, [sourceId, commodityId, unitId]);
+        data.map(s => ({ id: s.lunit_size_id, name: s.lunit_size_desc }))
+      )
+    )
+    .catch(console.error);
+}, [sourceId, commodityId, unitId]);
 
 
   function handleSourceChange(value: string) {
@@ -359,7 +378,7 @@ export default function ConverterForm() {
           </button>
 
           {result && (
-            <p className="text-3xl font-bold tracking-wide text-green-600 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+            <p className="font-bold tracking-wide text-green-600 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             {result}
             </p>          )}
         </div>
