@@ -8,7 +8,7 @@ export default async function Page() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      <main className="flex-1 pb-16">
+      <main className="flex-1 pb-16 pt-[120px]">
         {/* Hero */}
         <section className="mx-auto max-w-6xl px-4 pt-20 pb-16">
           <div className="text-center">

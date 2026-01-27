@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useMemo } from "react";
-//import Image from "next/image";
+import Image from "next/image";
 
 const requestCache = new Map<string, any>();
 
@@ -39,6 +39,7 @@ export default function ConverterForm() {
   const [sizeId, setSizeId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [result, setResult] = useState<string | null>(null);
+  const [note, setNote] = useState<string | null>(null);
   const [standardUnit, setStandardUnit] = useState('');
 
 
@@ -164,6 +165,7 @@ export default function ConverterForm() {
 
   function resetResult() {
     setResult(null);
+    setNote(null);
   }
 
   // image source URL
@@ -194,19 +196,19 @@ export default function ConverterForm() {
       // If the HTTP response itself failed (e.g. 404, 500)
       if (!res.ok) {
         setResult(
-          "No conversion factor has been configured for the selected combination. Kindly contact the Agric & Environment Section at GSS for further assistance."
+          "An error occurred while fetching conversion data. Please check your internet connection and try again."
         );
         return;
       }
 
       // Parse the JSON response
       const data = await res.json();
-      //console.log("Conversion data:", data);
+      console.log("Conversion data:", data);
 
       // Validate that expected data exists in the response
       if (!data.conversion_factor_kg) {
         setResult(
-          "Conversion factor data is unavailable for the selected combination. Kindly contact the Agric & Environment Section at GSS for further assistance."
+          "No conversion factor has been configured yet for the selected combination. Kindly check for the national average or contact the Agric & Environment Section at GSS."
         );
         return;
       }
@@ -227,8 +229,11 @@ export default function ConverterForm() {
       setResult(
         `${qty.toLocaleString()} ${data.local_unit} (${data.local_unit_size}) ≈ ${value.toFixed(
           3
-        )} ${standardUnit}`
+        )} ${standardUnit}` 
       );
+
+      setNote(data.notes || null);
+
     } catch (error) {
       // Catch network or unexpected runtime errors
       console.error("Conversion error:", error);
@@ -251,12 +256,15 @@ export default function ConverterForm() {
 <div className="mt-8 flex items-center justify-center">
   <div className="overflow-hidden rounded-[2rem] bg-slate-100 p-6 shadow-md">
     <div className="relative h-56 w-72">
-      <img
+      <Image
         src={'/imagePlaceholder.png'}
         alt={`local unit`}
         //onError={(e) => {e.currentTarget.src = '/imagePlaceholder.png'; }}
-        //fill        // <-- Image will fill this  h-56 w-72 box
+        fill        // <-- Image will fill this  h-56 w-72 box
+        sizes="33vw"
         className="absolute inset-0 h-full w-full object-cover rounded-[1.5rem]"
+        loading="eager"
+        priority
       />
     </div>
   </div>
@@ -268,7 +276,7 @@ export default function ConverterForm() {
         <div className="grid gap-5 md:grid-cols-2">
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-700">
-              Select Region
+              Select Region/ National
             </label>
 
             <select className={selectBase} value={regionId} onChange={(e) => {setRegionId(e.target.value); resetResult();}}>
@@ -380,7 +388,14 @@ export default function ConverterForm() {
           {result && (
             <p className="font-bold tracking-wide text-green-600 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             {result}
-            </p>          )}
+            </p> 
+          )}
+          
+          {note && (
+            <p className="tracking-wide text-brandPurple text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+              Note: {note}
+            </p>
+          )}
         </div>
       </div>
 
