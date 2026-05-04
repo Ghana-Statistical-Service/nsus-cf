@@ -5,39 +5,6 @@ import Footer from "@/components/Footer";
 
 export default function AboutPage() {
 
-  const sectionStyle = {
-    background: '#fff',
-    borderRadius: 14,
-    padding: '28px 32px',
-    marginBottom: 24,
-    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-  };
-
-  const headingStyle = {
-    fontSize: 20,
-    fontWeight: 700,
-    color: '#1a5276',
-    marginTop: 0,
-    marginBottom: 14,
-    paddingBottom: 10,
-    borderBottom: '2px solid #e8f0fe',
-  };
-
-  const stepStyle = {
-    display: 'flex',
-    gap: 16,
-    marginBottom: 18,
-    alignItems: 'flex-start',
-  };
-
-  const stepNumStyle = {
-    width: 32, height: 32, minWidth: 32,
-    background: '#1a5276', color: '#fff',
-    borderRadius: '50%', display: 'flex',
-    alignItems: 'center', justifyContent: 'center',
-    fontWeight: 700, fontSize: 14,
-  };
-
   const steps = [
     {
       title: 'Select a Commodity',
@@ -76,8 +43,8 @@ export default function AboutPage() {
       <main className="flex-1 pb-16 pt-[120px]">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           {/* What is NSUs-CF */}
-          <div style={sectionStyle}>
-            <h2 style={headingStyle}>What is the NSUs-CF System?</h2>
+          <div className="bg-white rounded-xl p-7 sm:p-8 mb-6 shadow-sm">
+            <h2 className="text-xl font-bold text-brandPurple mt-0 mb-3.5 pb-2.5 border-b-2 border-blue-100">What is the NSUs-CF System?</h2>
             <p>
               The <strong>Non-Standard Units Conversion Factor (NSUs-CF)</strong> system is a
               data tool developed by the Ghana Statistical Service (GSS) to standardise the
@@ -96,16 +63,16 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* How to Use */}
-        <div style={sectionStyle}>
-          <h2 style={headingStyle}>How to Use the System</h2>
-          <div style={{ marginTop: 4 }}>
+        {/* How to Use */}
+        <div id="how-to-use" className="bg-white rounded-xl p-7 sm:p-8 mb-6 shadow-sm">
+          <h2 className="text-xl font-bold text-brandPurple mt-0 mb-3.5 pb-2.5 border-b-2 border-blue-100">How to Use the System</h2>
+          <div className="mt-1">
             {steps.map((step, i) => (
-              <div key={i} style={stepStyle}>
-                <div style={stepNumStyle}>{i + 1}</div>
+              <div key={i} className="flex gap-4 mb-4.5 items-start">
+                <div className="w-8 h-8 min-w-[32px] bg-brandPurple text-white rounded-full flex items-center justify-center font-bold text-sm">{i + 1}</div>
                 <div>
-                  <div style={{ fontWeight: 600, color: '#1a1a1a', marginBottom: 3 }}>{step.title}</div>
-                  <div style={{ color: '#555', fontSize: 14, lineHeight: 1.65 }}>{step.desc}</div>
+                  <div className="font-semibold text-[#1a1a1a] mb-[3px]">{step.title}</div>
+                  <div className="text-[#555] text-sm leading-[1.65]">{step.desc}</div>
                 </div>
               </div>
             ))}
@@ -113,24 +80,24 @@ export default function AboutPage() {
         </div>
 
         {/* Contact */}
-        <div style={sectionStyle}>
-          <h2 style={headingStyle}>Contact Us</h2>
-          <p style={{ color: '#555', fontSize: 14, marginTop: 0, marginBottom: 18 }}>
+        <div className="bg-white rounded-xl p-7 sm:p-8 mb-6 shadow-sm">
+          <h2 className="text-xl font-bold text-brandPurple mt-0 mb-3.5 pb-2.5 border-b-2 border-blue-100">Contact Us</h2>
+          <p className="text-[#555] text-sm mt-0 mb-[18px]">
             For enquiries about the NSUs-CF system, data requests, or to report errors,
             please contact the Agriculture &amp; Environment Statistics Division:
           </p>
-          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+          <table className="w-full border-collapse">
             <tbody>
               {contacts.map(({ label, value }) => (
-                <tr key={label} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                  <td style={{ padding: '10px 16px 10px 0', fontWeight: 600, fontSize: 13, color: '#333', whiteSpace: 'nowrap', verticalAlign: 'top' }}>
+                <tr key={label} className="border-b border-[#f0f0f0]">
+                  <td className="py-2.5 pr-4 pl-0 font-semibold text-[13px] text-[#333] whitespace-nowrap align-top">
                     {label}
                   </td>
-                  <td style={{ padding: '10px 0', fontSize: 13, color: '#555' }}>
+                  <td className="py-2.5 text-[13px] text-[#555]">
                     {label === 'Email' ? (
-                      <a href={`mailto:${value}`} style={{ color: '#1a5276' }}>{value}</a>
+                      <a href={`mailto:${value}`} className="text-[#1a5276] hover:underline">{value}</a>
                     ) : label === 'Website' ? (
-                      <a href={`https://${value}`} target="_blank" rel="noopener noreferrer" style={{ color: '#1a5276' }}>{value}</a>
+                      <a href={`https://${value}`} target="_blank" rel="noopener noreferrer" className="text-[#1a5276] hover:underline">{value}</a>
                     ) : value}
                   </td>
                 </tr>

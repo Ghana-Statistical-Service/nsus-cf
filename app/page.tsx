@@ -31,10 +31,13 @@ export default async function Page() {
             </p>
 
             {/* CTA button */}
-            <button className="mt-10 inline-flex items-center rounded-full bg-brandPurple px-10 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition hover:bg-brandTeal">
-              Getting Started
-              <span className="ml-2 text-lg">→</span>
-            </button>
+            <Link href="/about/#how-to-use">
+              <button className="mt-10 inline-flex items-center rounded-full bg-brandPurple px-10 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition hover:bg-brandTeal">
+                Getting Started
+                <span className="ml-2 text-lg">→</span>
+              </button>
+            </Link>
+            
           </div>
         </section>
 
