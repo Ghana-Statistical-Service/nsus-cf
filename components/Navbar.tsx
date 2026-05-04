@@ -82,13 +82,6 @@ export default function Navbar() {
           <div className="md:hidden bg-brandPurple border-t border-white/20">
             <nav className="flex flex-col px-4 py-3 text-sm font-medium">
               <Link
-                href="/#matrix"
-                className="py-2 hover:text-brandTeal"
-                onClick={() => setOpen(false)}
-              >
-                Conversion Table
-              </Link>
-              <Link
                 href="/#convert"
                 className="py-2 hover:text-brandTeal"
                 onClick={() => setOpen(false)}
@@ -101,6 +94,13 @@ export default function Navbar() {
                 onClick={() => setOpen(false)}
               >
                 About
+              </Link>
+              <Link
+                href="/#gallery"
+                className="py-2 hover:text-brandTeal"
+                onClick={() => setOpen(false)}
+              >
+                Photo Library
               </Link>
               <Link
                 href="/#help"
