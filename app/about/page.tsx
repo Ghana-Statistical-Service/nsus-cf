@@ -45,18 +45,18 @@ export default function AboutPage() {
           {/* What is NSUs-CF */}
           <div className="bg-white rounded-xl p-7 sm:p-8 mb-6 shadow-sm">
             <h2 className="text-xl font-bold text-brandPurple mt-0 mb-3.5 pb-2.5 border-b-2 border-blue-100">What is the NSUs-CF System?</h2>
-            <p>
+            <p className="text-[#444] leading-[1.8] mt-0">
               The <strong>Non-Standard Units Conversion Factor (NSUs-CF)</strong> system is a
               data tool developed by the Ghana Statistical Service (GSS) to standardise the
               measurement of agricultural commodities across Ghana.
             </p>
-            <p>
+            <p className="text-[#444] leading-[1.8]">
               Farmers, traders, and households in Ghana commonly measure commodities using
               local units such as <em>Olonkas</em>, <em>Rubber Buckets</em>, <em>Baskets</em>,
               and <em>Tins</em>. These units vary in size by region, commodity, and context —
               making it difficult to compare prices and quantities without a reference guide.
             </p>
-            <p>
+            <p className="text-[#444] leading-[1.8] mb-0">
               The NSUs-CF system provides verified conversion factors (in kilograms) for each
               local unit, enabling enumerators, researchers, and policymakers to convert
               local measurements into standard weights reliably.
