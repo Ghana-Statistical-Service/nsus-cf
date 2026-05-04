@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -50,18 +51,18 @@ export default function Navbar() {
 
           {/* Desktop menu */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#conversiontable" className="hover:text-brandTeal">
-              Conversion Table
-            </a>
-            <a href="#convert" className="hover:text-brandTeal">
+            <Link href="/#convert" className="hover:text-brandTeal">
               Convert
-            </a>
-            <a href="#about" className="hover:text-brandTeal">
+            </Link>
+            <Link href="/#about" className="hover:text-brandTeal">
               About
-            </a>
-            <a href="#help" className="hover:text-brandTeal">
+            </Link>
+            <Link href="/#gallery" className="hover:text-brandTeal">
+              Photo Library
+            </Link>
+            <Link href="/#help" className="hover:text-brandTeal">
               Help?
-            </a>
+            </Link>
           </nav>
 
           {/* Mobile menu button */}
@@ -80,34 +81,34 @@ export default function Navbar() {
         {open && (
           <div className="md:hidden bg-brandPurple border-t border-white/20">
             <nav className="flex flex-col px-4 py-3 text-sm font-medium">
-              <a
-                href="#matrix"
+              <Link
+                href="/#matrix"
                 className="py-2 hover:text-brandTeal"
                 onClick={() => setOpen(false)}
               >
                 Conversion Table
-              </a>
-              <a
-                href="#convert"
+              </Link>
+              <Link
+                href="/#convert"
                 className="py-2 hover:text-brandTeal"
                 onClick={() => setOpen(false)}
               >
                 Convert
-              </a>
-              <a
-                href="#about"
+              </Link>
+              <Link
+                href="/#about"
                 className="py-2 hover:text-brandTeal"
                 onClick={() => setOpen(false)}
               >
                 About
-              </a>
-              <a
-                href="#help"
+              </Link>
+              <Link
+                href="/#help"
                 className="py-2 hover:text-brandTeal"
                 onClick={() => setOpen(false)}
               >
                 Help?
-              </a>
+              </Link>
             </nav>
           </div>
         )}

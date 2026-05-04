@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import ConverterForm from "@/components/ConverterForm";
 import Footer from "@/components/Footer";
@@ -58,12 +59,15 @@ export default async function Page() {
               into standard units such as kilograms.
             </p>
 
-            <button
+            <Link href="/about">
+              <button
               id="about"
               className="mt-10 rounded-full bg-brandPink px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition hover:bg-white hover:text-brandPurple"
-            >
-              Read More →
-            </button>
+              >
+                Read More →
+              </button>
+            </Link>
+
           </div>
         </section>
 
