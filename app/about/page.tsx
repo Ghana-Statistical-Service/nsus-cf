@@ -44,9 +44,9 @@ const BREADCRUMB = ["About", "NSUs Conversion Factors"];
 
   const contacts = [
     { label: 'Division',  value: 'Agriculture & Environment Statistics Division' },
-    { label: 'Email',     value: 'agric@statsghana.gov.gh' },
+    { label: 'Email',     value: 'info@statsghana.gov.gh' },
     { label: 'Website',   value: 'www.statsghana.gov.gh' },
-    { label: 'Phone',     value: '+233 (0)30 2671732' },
+    { label: 'Phone',     value: '+233 (0)30 266 4304' },
     { label: 'Address',   value: 'Ghana Statistical Service, P.O. Box GP 1098, Accra, Ghana' },
   ];
 
@@ -101,15 +101,15 @@ export default function AboutPage() {
               1.0 Overview
             </h4>
 
-            <p className="mb-4 text-justify">
+            <p className="text-[#1a1a1a] leading-[1.8] mt-0 mb-4 text-justify ">
               The Ghana Non-Standard Units Conversion Factors (NSUs-CF) system is a web-based platform that provides standardised and verified average conversion factors for a wide range of Non-Standard Units (NSUs), commonly referred to as local units of measurement, used in Ghana at the household, market, and farmgate levels. These local units include olonka (American tin), tomato paste tins, koko bowls, blue rubber buckets, sacks, and similar containers.
             </p>
 
-            <p className="mb-4 text-justify">
+            <p className="text-[#1a1a1a] leading-[1.8] mt-0 mb-4 text-justify">
               The system enables the conversion of quantities reported in these local units into accurate and reliable standard units, primarily kilograms (kg), at both the national and the 16 regions. In addition, the NSUs-CF system provides average weights (kg) for major food groups and commodities. The lists are not exhaustive and are meant as a general guide. These are aligned with internationally recognised classifications, including the <strong>Central Product Classification (CPC Ver. 2.1)</strong> with the FAO expansion for agricultural statistics. This ensures that quantities reported using local measurement practices can be translated into accurate, comparable, and internationally consistent statistical measures, thereby supporting analysis of household consumption, agriculture output analysis at the market and farmgate reporting, and policy formulation.
             </p>
 
-            <p className="mb-4 text-justify">
+            <p className="text-[#1a1a1a] leading-[1.8] mt-0 mb-4 text-justify">
               While the system covers only the commonly used NSUs captured in the survey, there may be a few additional NSUs used by traders in some parts of the country that are not included.
             </p>
           </div>
@@ -169,7 +169,7 @@ export default function AboutPage() {
               For clarity and visual reference, users are encouraged to consult the Ghana NSUS Photo Library to guide the collection of consumption and agricultural production quantities at:
               <br /><br />
               <Link
-                href="https://nsuscf.statsghana.gov.gh/gallery"
+                href="/#gallery"
                 className="text-blue-600 font-medium hover:underline"
               >
                 <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
@@ -212,7 +212,7 @@ export default function AboutPage() {
         {/* Contact */}
         <div className="bg-white rounded-xl p-7 sm:p-8 mb-6 shadow-sm">
           <h2 className="text-xl font-bold text-brandPurple mt-0 mb-3.5 pb-2.5 border-b-2 border-blue-100">Contact Us</h2>
-          <p className="text-[#555] text-sm mt-0 mb-[18px]">
+          <p className="text-[#555] text-[1.65] mt-0 mb-[18px]">
             For enquiries about the NSUs-CF system, data requests, or to report errors,
             please contact the Agriculture &amp; Environment Statistics Division:
           </p>
@@ -220,10 +220,10 @@ export default function AboutPage() {
             <tbody>
               {contacts.map(({ label, value }) => (
                 <tr key={label} className="border-b border-[#f0f0f0]">
-                  <td className="py-2.5 pr-4 pl-0 font-semibold text-[13px] text-[#333] whitespace-nowrap align-top">
+                  <td className="py-2.5 pr-4 pl-0 font-semibold text-[1.65] text-[#333] whitespace-nowrap align-top">
                     {label}
                   </td>
-                  <td className="py-2.5 text-[13px] text-[#555]">
+                  <td className="py-2.5 text-[1.65] text-[#555]">
                     {label === 'Email' ? (
                       <a href={`mailto:${value}`} className="text-[#1a5276] hover:underline">{value}</a>
                     ) : label === 'Website' ? (
