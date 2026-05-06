@@ -47,7 +47,7 @@ export default function Navbar() {
       {/* Main nav */}
       <div className="bg-brandPurple text-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <span className="text-2xl font-semibold tracking-wide">NSUs-CF</span>
+          <Link href="/"><span className="text-2xl font-semibold tracking-wide">NSUs-CF</span></Link>
 
           {/* Desktop menu */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
