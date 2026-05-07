@@ -169,7 +169,7 @@ export default function AboutPage() {
               For clarity and visual reference, users are encouraged to consult the Ghana NSUS Photo Library to guide the collection of consumption and agricultural production quantities at:
               <br /><br />
               <Link
-                href="/#gallery"
+                href="/gallery"
                 className="text-blue-600 font-medium hover:underline"
               >
                 <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">

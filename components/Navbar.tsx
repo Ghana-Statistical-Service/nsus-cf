@@ -57,7 +57,7 @@ export default function Navbar() {
             <Link href="/#about" className="hover:text-brandTeal">
               About
             </Link>
-            <Link href="/#gallery" className="hover:text-brandTeal">
+            <Link href="/gallery" className="hover:text-brandTeal">
               Photo Library
             </Link>
             <Link href="/#help" className="hover:text-brandTeal">
@@ -96,7 +96,7 @@ export default function Navbar() {
                 About
               </Link>
               <Link
-                href="/#gallery"
+                href="/gallery"
                 className="py-2 hover:text-brandTeal"
                 onClick={() => setOpen(false)}
               >
