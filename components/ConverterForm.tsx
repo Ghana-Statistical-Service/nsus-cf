@@ -208,7 +208,7 @@ export default function ConverterForm() {
       // Validate that expected data exists in the response
       if (!data.conversion_factor_kg) {
         setResult(
-          "No conversion factor has been configured yet for the selected combination. Kindly check for the national average or contact the Agric & Environment Section at GSS."
+          "No data is available for the selected item in this region, or the selected unit is not applicable at this level."
         );
         return;
       }

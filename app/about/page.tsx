@@ -37,8 +37,8 @@ const BREADCRUMB = ["About", "NSUs Conversion Factors"];
       desc: 'Click Convert Unit and wait for the results to be displayed.',
     },
     {
-      title: 'Use the Photo Gallery',
-      desc: 'If you are unsure which unit you have, visit the Photo Gallery to visually identify local units by commodity and source.',
+      title: 'Use the Photo Library for Visual Reference',
+      desc: 'If you are unsure which unit you have, visit the Photo Library to visually identify local units by commodity and source.',
     },
   ];
 
