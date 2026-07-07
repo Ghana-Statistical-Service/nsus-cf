@@ -1,11 +1,21 @@
-import{ NextResponse }from 'next/server';
+import { NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 import { query } from '@/lib/db';
 
-export const revalidate = 86400; // 24 hours
+// Cached at runtime (not build time) so the build doesn't need a live DB.
+export const dynamic = 'force-dynamic';
+
+const getRegions = unstable_cache(
+  async () => {
+    const { rows } = await query(
+      `SELECT region_id, region FROM regions ORDER BY region_id`
+    );
+    return rows;
+  },
+  ['regions'],
+  { revalidate: 86400 } // 24 hours
+);
 
 export async function GET() {
-  const { rows } = await query(
-    `SELECT region_id, region FROM regions ORDER BY region_id`
-  );
-  return NextResponse.json(rows);
+  return NextResponse.json(await getRegions());
 }
